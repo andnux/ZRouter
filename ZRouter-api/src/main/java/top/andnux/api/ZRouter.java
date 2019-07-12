@@ -55,9 +55,18 @@ public class ZRouter {
         return this;
     }
 
-    public void navigation() {
+    public Fragment navigation() {
+        return navigation(null);
+    }
+
+    public Fragment navigation(NavigationListener listener) {
         Class<?> aClass = sRouteMap.get(mUrl);
-        if (aClass == null) return;
+        if (aClass == null) {
+            if (listener != null) {
+                listener.onError(new NavigationException("路径未找到：" + mUrl));
+            }
+            return null;
+        }
         if (Activity.class.isAssignableFrom(aClass)) {
             Intent intent = new Intent(sApplication, aClass);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -65,7 +74,30 @@ public class ZRouter {
                 intent.putExtra(KEY_DATA, JSON.toJSONString(mParams));
             }
             sApplication.startActivity(intent);
+            if (listener != null) {
+                listener.onSuccess();
+            }
+            return null;
+        } else if (Fragment.class.isAssignableFrom(aClass)) {
+            try {
+                Fragment fragment = (Fragment) aClass.newInstance();
+                if (!mParams.isEmpty()) {
+                    Bundle args = new Bundle();
+                    args.putString(KEY_DATA, JSON.toJSONString(mParams));
+                    fragment.setArguments(args);
+                }
+                if (listener != null) {
+                    listener.onSuccess();
+                }
+                return fragment;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        if (listener != null) {
+            listener.onError(new NavigationException("目前只支持Activity和Fragment"));
+        }
+        return null;
     }
 
     public static ZRouter getInstance() {
@@ -79,7 +111,7 @@ public class ZRouter {
         return instance;
     }
 
-    public ZRouter putString(String key, String value) {
+    public ZRouter putParams(String key, Object value) {
         mParams.put(key, value);
         return this;
     }

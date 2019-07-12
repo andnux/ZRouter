@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import top.andnux.api.ZRouter;
 
@@ -16,8 +18,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        ZRouter.getInstance().with("/login/activity")
-                .putString("name","张春林")
+        Fragment fragment = ZRouter.getInstance().with("/login/fragment")
+                .putParams("name", "张春林")
                 .navigation();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.content,fragment);
+        fragmentTransaction.commitNow();
     }
 }
