@@ -1,1 +1,1 @@
-include ':app', ':ZRouter-compiler', ':ZRouter-annotation', ':ZRouter-api'
+include ':app', ':compiler', ':annotation', ':api'
