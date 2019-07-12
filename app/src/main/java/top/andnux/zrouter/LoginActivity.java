@@ -7,9 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import top.andnux.annotation.AutoValue;
 import top.andnux.annotation.Router;
-import top.andnux.api.ZRouterInject;
+import top.andnux.api.ZRouter;
 
-@Router("/Login")
+@Router("/login/activity")
 public class LoginActivity extends AppCompatActivity {
 
     @AutoValue()
@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ZRouterInject.init(this);
+        ZRouter.getInstance().inject(this);
         Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
     }
 }

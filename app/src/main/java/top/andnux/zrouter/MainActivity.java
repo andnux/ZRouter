@@ -5,6 +5,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import top.andnux.api.ZRouter;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -14,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        ZRouter.launchLoginActivity(this, "123", "哈哈哈");
+        ZRouter.getInstance().with("/login/activity")
+                .putString("name","张春林")
+                .navigation();
     }
 }
